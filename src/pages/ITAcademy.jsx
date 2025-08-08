@@ -7,7 +7,7 @@ import Cybersecurity from './Cybersecurity';
 import MobileAppDevelopment from './Mobileapp';
 import UIUXDesign from './Uiux';
 import DataScience from './Datascience';
-import NexGenLogo from '../assets/NexGen.png';
+import NexGenLogo from '../Assets/NexGen.png';
 
 const ITAcademy= () => {
   const navigate = useNavigate();
