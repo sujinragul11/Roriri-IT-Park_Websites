@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-scroll';
 import { Helmet } from 'react-helmet-async';
 import { Home } from 'lucide-react';
-import Logo from '../assets/ROSHAN TILES LOGO (1).png'; // Make sure this path is correct
+import Logo from '../Assets/ROSHAN TILES LOGO (1).png'; // Make sure this path is correct
 
 const RoshanTiles = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

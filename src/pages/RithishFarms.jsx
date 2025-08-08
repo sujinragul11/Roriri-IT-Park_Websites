@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Leaf, MapPin, Clock, Users, Star, Heart, Camera, Calendar, Utensils, Sun, ChevronRight, Wind, Flower, TreePine, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import RithishLogo from '../assets/Rithisforms.jpeg'; // Import your logo
+import RithishLogo from '../Assets/Rithisforms.jpeg'; // Import your logo
 
 const RithishFarms = () => {
   const [gallery, setGallery] = useState([]);

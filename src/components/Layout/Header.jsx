@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import RoririLogo from '../../assets/Roriri.png';
+import RoririLogo from '../../Assets/Roriri.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
