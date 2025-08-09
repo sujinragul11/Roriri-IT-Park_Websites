@@ -1,0 +1,298 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// AUTHENTICATION & USER MANAGEMENT
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  role      UserRole @default(ADMIN)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+// ============================================================================
+// IT ACADEMY MODELS
+// ============================================================================
+
+model Instructor {
+  id          String   @id @default(cuid())
+  name        String
+  bio         String?
+  experience  String?
+  expertise   String?
+  imageUrl    String?  @map("image_url")
+  linkedinUrl String?  @map("linkedin_url")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  courses Course[]
+
+  @@map("instructors")
+}
+
+model Course {
+  id           String      @id @default(cuid())
+  title        String
+  description  String
+  duration     String
+  price        Decimal     @db.Decimal(10, 2)
+  level        CourseLevel @default(BEGINNER)
+  technologies String? // JSON array of technologies
+  imageUrl     String?     @map("image_url")
+  isActive     Boolean     @default(true) @map("is_active")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  // Foreign Keys
+  instructorId String? @map("instructor_id")
+
+  // Relations
+  instructor  Instructor?        @relation(fields: [instructorId], references: [id], onDelete: SetNull)
+  enrollments CourseEnrollment[]
+
+  @@map("courses")
+}
+
+model CourseEnrollment {
+  id             String   @id @default(cuid())
+  studentName    String   @map("student_name")
+  studentEmail   String   @map("student_email")
+  studentPhone   String?  @map("student_phone")
+  preferredBatch String?  @map("preferred_batch")
+  status         String   @default("pending")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // Foreign Keys
+  courseId String @map("course_id")
+
+  // Relations
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@map("course_enrollments")
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+// ============================================================================
+// ROSHAN TILES MODELS
+// ============================================================================
+
+model Product {
+  id            String          @id @default(cuid())
+  name          String
+  description   String
+  category      ProductCategory @default(FLOOR)
+  size          String?
+  color         String?
+  price         Decimal         @db.Decimal(10, 2)
+  stockQuantity Int             @default(0) @map("stock_quantity")
+  imageUrls     String? // JSON array of image URLs
+  isActive      Boolean         @default(true) @map("is_active")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  @@map("products")
+}
+
+enum ProductCategory {
+  FLOOR
+  WALL
+  OUTDOOR
+  DECORATIVE
+}
+
+// ============================================================================
+// RITHISH FARMS MODELS
+// ============================================================================
+
+model Package {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  duration    String?
+  includes    String? // What's included in the package
+  maxPeople   Int?     @map("max_people")
+  imageUrls   String? // JSON array of image URLs
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  bookings Booking[]
+
+  @@map("packages")
+}
+
+// ============================================================================
+// RORIRISOFT MODELS
+// ============================================================================
+
+model Job {
+  id           String    @id @default(cuid())
+  title        String
+  department   String?
+  location     String?
+  type         JobType   @default(FULL_TIME)
+  description  String
+  requirements String
+  salaryRange  String?   @map("salary_range")
+  isActive     Boolean   @default(true) @map("is_active")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  applications JobApplication[]
+
+  @@map("jobs")
+}
+
+model JobApplication {
+  id            String   @id @default(cuid())
+  applicantName String   @map("applicant_name")
+  applicantEmail String  @map("applicant_email")
+  applicantPhone String? @map("applicant_phone")
+  resumeUrl     String?  @map("resume_url")
+  coverLetter   String?  @map("cover_letter")
+  status        String   @default("pending")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Foreign Keys
+  jobId String @map("job_id")
+
+  // Relations
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("job_applications")
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+}
+
+// ============================================================================
+// SHARED MODELS (BOOKINGS, INQUIRIES, GALLERY)
+// ============================================================================
+
+model Booking {
+  id              String      @id @default(cuid())
+  type            BookingType
+  customerName    String      @map("customer_name")
+  customerEmail   String      @map("customer_email")
+  customerPhone   String?     @map("customer_phone")
+  bookingDate     DateTime?   @map("booking_date")
+  numberOfPeople  Int?        @map("number_of_people")
+  specialRequests String?     @map("special_requests")
+  status          String      @default("pending")
+  totalAmount     Decimal?    @db.Decimal(10, 2) @map("total_amount")
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  // Foreign Keys (optional - depends on booking type)
+  packageId String? @map("package_id")
+
+  // Relations
+  package Package? @relation(fields: [packageId], references: [id], onDelete: SetNull)
+
+  @@map("bookings")
+}
+
+model Inquiry {
+  id        String      @id @default(cuid())
+  type      InquiryType
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    String      @default("new")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  @@map("inquiries")
+}
+
+model Gallery {
+  id           String      @id @default(cuid())
+  businessType BusinessType @map("business_type")
+  title        String?
+  description  String?
+  imageUrl     String      @map("image_url")
+  altText      String?     @map("alt_text")
+  sortOrder    Int         @default(0) @map("sort_order")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  @@map("gallery")
+}
+
+// ============================================================================
+// ENUMS FOR SHARED MODELS
+// ============================================================================
+
+enum BookingType {
+  FARM
+  INDUSTRIAL
+  TILES
+  COURSE
+  OTHER
+}
+
+enum InquiryType {
+  GENERAL
+  COURSE
+  PRODUCT
+  PACKAGE
+  JOB
+  SUPPORT
+}
+
+enum BusinessType {
+  IT_ACADEMY
+  RITHISH_FARMS
+  ROSHAN_TILES
+  INDUSTRIAL_VISITS
+  RORIRISOFT
+}
+
+// ============================================================================
+// INDEXES FOR PERFORMANCE
+// ============================================================================
+
+// Add indexes for frequently queried fields
+// These would be added as separate index statements in migrations
