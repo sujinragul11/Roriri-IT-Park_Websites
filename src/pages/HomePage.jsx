@@ -281,7 +281,7 @@ const HomePage = () => {
               <span className="text-sm font-medium text-blue-800">Our Portfolio</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
-              Our Business Portfolio
+              Our Organizations Portfolio
             </h2>
             <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto font-normal">
               Discover our diverse range of services across multiple industries, 

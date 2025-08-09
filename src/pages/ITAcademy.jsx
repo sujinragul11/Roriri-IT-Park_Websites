@@ -479,15 +479,16 @@ const ITAcademy= () => {
   className={`
     flex items-center space-x-1 px-4 py-2 rounded-lg transition-all
     ${isDarkMode 
-      ? 'bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700' 
-      : 'bg-gray-100 text-gray-700 hover:text-gray-900 hover:bg-gray-200'
+      ? 'bg-blue-700 text-white hover:bg-blue-800' 
+      : 'bg-blue-500 text-white hover:bg-blue-600'
     }
     font-medium shadow-sm hover:shadow-md
   `}
 >
   <Home className="h-5 w-5" />
-  <span>Home</span>
+  <span>𝐇𝐨𝐦𝐞</span>
 </button>
+
                 {currentPage === 'home' && (
                   <>
                     <button onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })} className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'} transition-colors font-medium`}>Courses</button>
