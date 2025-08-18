@@ -69,7 +69,7 @@ const AdminLogin = () => {
                 <span className="text-white font-bold text-2xl">R</span>
               </div>
               <h2 className="text-3xl font-bold text-gray-900">Admin Portal</h2>
-              <p className="text-gray-600 mt-2">Sign in to manage your businesses</p>
+              <p className="text-gray-600 mt-2">Sign in to manage your Organizations</p>
             </div>
 
             {/* Login Form */}

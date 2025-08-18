@@ -1,44 +1,77 @@
 // MobileAppDevelopment.jsx
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Mobileapp = () => {
+// Import all local images
+import XcodeImg from '../Assets/MobileApp/Xcode.jpg';
+import VsCodeImg from '../Assets/MobileApp/VsCode.jpg';
+import SwiftImg from '../Assets/MobileApp/Swift.jpg';
+import ReactNativeImg from '../Assets/MobileApp/ReactNative.jpg';
+import KotlinImg from '../Assets/MobileApp/Kotlin.png';
+import FlutterImg from '../Assets/MobileApp/Flutter.jpg';
+import FirebaseImg from '../Assets/MobileApp/Firebase.png';
+import AndroidStudioImg from '../Assets/MobileApp/AndroidStudio.webp';
+import UiDesignImg from '../Assets/MobileApp/UiDesign.jpg';
+import StateManagementImg from '../Assets/MobileApp/StateManagement.jpg';
+import AppPublishingImg from '../Assets/MobileApp/AppPublishing.jpg';
+import ApiIntegrationImg from '../Assets/MobileApp/APIIntegration.jpg';
+import MobileAppHeroImg from '../Assets/MobileApp/MobileAppDevelopment.jpg';
+
+const MobileApp = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // Mobile development data
+  // All images organized by category
   const mobileData = {
     overview: {
       title: "Mobile App Development",
       description: "Master cross-platform and native mobile app development using React Native, Flutter, iOS (Swift) and Android (Kotlin). Learn to build, test, and deploy professional mobile applications for both platforms.",
       duration: "6 months",
       level: "Beginner to Advanced",
-      image: "https://source.unsplash.com/random/800x500?mobileapp"
+      image: MobileAppHeroImg
     },
     frameworks: {
       title: "Development Frameworks",
       items: [
-        { name: "React Native", image: "https://source.unsplash.com/random/300x200?reactnative" },
-        { name: "Flutter", image: "https://source.unsplash.com/random/300x200?flutter" },
-        { name: "Swift (iOS)", image: "https://source.unsplash.com/random/300x200?swift" },
-        { name: "Kotlin (Android)", image: "https://source.unsplash.com/random/300x200?kotlin" }
+        { name: "React Native", image: ReactNativeImg },
+        { name: "Flutter", image: FlutterImg },
+        { name: "Swift (iOS)", image: SwiftImg },
+        { name: "Kotlin (Android)", image: KotlinImg }
       ]
     },
     tools: {
       title: "Development Tools",
       items: [
-        { name: "Android Studio", image: "https://source.unsplash.com/random/300x200?androidstudio" },
-        { name: "Xcode", image: "https://source.unsplash.com/random/300x200?xcode" },
-        { name: "VS Code", image: "https://source.unsplash.com/random/300x200?vscode" },
-        { name: "Firebase", image: "https://source.unsplash.com/random/300x200?firebase" }
+        { name: "Android Studio", image: AndroidStudioImg },
+        { name: "Xcode", image: XcodeImg },
+        { name: "VS Code", image: VsCodeImg },
+        { name: "Firebase", image: FirebaseImg }
       ]
     },
     concepts: {
       title: "Key Concepts",
       items: [
-        { name: "UI/UX Design", image: "https://source.unsplash.com/random/300x200?mobileui" },
-        { name: "State Management", image: "https://source.unsplash.com/random/300x200?statemanagement" },
-        { name: "API Integration", image: "https://source.unsplash.com/random/300x200?api" },
-        { name: "App Publishing", image: "https://source.unsplash.com/random/300x200?appstore" }
+        { name: "UI/UX Design", image: UiDesignImg },
+        { name: "State Management", image: StateManagementImg },
+        { name: "API Integration", image: ApiIntegrationImg },
+        { name: "App Publishing", image: AppPublishingImg }
+      ]
+    },
+    // New section showcasing all images
+    gallery: {
+      title: "Technology Gallery",
+      items: [
+        { name: "Xcode", image: XcodeImg },
+        { name: "VS Code", image: VsCodeImg },
+        { name: "Swift", image: SwiftImg },
+        { name: "React Native", image: ReactNativeImg },
+        { name: "Kotlin", image: KotlinImg },
+        { name: "Flutter", image: FlutterImg },
+        { name: "Firebase", image: FirebaseImg },
+        { name: "Android Studio", image: AndroidStudioImg },
+        { name: "UI Design", image: UiDesignImg },
+        { name: "State Management", image: StateManagementImg },
+        { name: "API Integration", image: ApiIntegrationImg },
+        { name: "App Publishing", image: AppPublishingImg }
       ]
     }
   };
@@ -47,7 +80,6 @@ const Mobileapp = () => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -77,14 +109,34 @@ const Mobileapp = () => {
             ))}
           </div>
         );
+      case 'gallery':
+        return (
+          <div className="space-y-8">
+            <h3 className="text-xl font-semibold">All Development Technologies</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {mobileData.gallery.items.map((tech, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-purple-200">
+                    <img 
+                      src={tech.image} 
+                      alt={tech.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="mt-2 text-sm text-center">{tech.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
       default:
         return (
           <div className="flex flex-col md:flex-row gap-8 items-center">
             <div className="md:w-1/2">
               <img 
                 src={mobileData.overview.image} 
-                alt="Mobile App Development Overview" 
-                className="rounded-lg shadow-xl w-full h-auto"
+                alt="Mobile App Development" 
+                className="rounded-lg shadow-xl w-full h-auto object-cover"
               />
             </div>
             <div className="md:w-1/2">
@@ -122,9 +174,6 @@ const Mobileapp = () => {
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "https://source.unsplash.com/random/300x200?mobile";
-          }}
         />
       </div>
       <div className="p-4">
@@ -145,13 +194,15 @@ const Mobileapp = () => {
           </p>
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs - Added Gallery tab */}
         <div className="flex flex-wrap justify-center mb-8 border-b border-gray-200">
-          {['overview', 'frameworks', 'tools', 'concepts'].map((tab) => (
+          {['overview', 'frameworks', 'tools', 'concepts', 'gallery'].map((tab) => (
             <button
               key={tab}
               onClick={() => setCurrentTab(tab)}
-              className={`px-6 py-3 font-medium text-sm rounded-t-lg mr-2 mb-2 ${currentTab === tab ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+              className={`px-6 py-3 font-medium text-sm rounded-t-lg mr-2 mb-2 ${
+                currentTab === tab ? 'bg-purple-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'
+              }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -204,11 +255,9 @@ const Mobileapp = () => {
             ))}
           </div>
         </div>
-
-       
       </div>
     </div>
   );
 };
 
-export default Mobileapp;
+export default MobileApp;

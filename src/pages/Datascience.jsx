@@ -1,42 +1,56 @@
-// Datascience.jsx
 import { useState, useEffect } from 'react';
+
+// Import all your local images
+import AutonomousVehicles from '../Assets/AI/AutonomousVehicles.jpg';
+import Chatbots from '../Assets/AI/Chatbots.jpg';
+import ComputerVision from '../Assets/AI/ComputerVision.jpg';
+import DataScienceOverview from '../Assets/AI/DataScience&AIOverview.jpg';
+import Deeplearning from '../Assets/AI/Deeplearning.jpg';
+import MachineLearning from '../Assets/AI/MechineLearning.png';
+import NaturalLanguageProcessing from '../Assets/AI/NaturalLanguageProcessing.jpg';
+import PredictiveAnalytics from '../Assets/AI/PredictiveAnalytics.jpg';
+import Python from '../Assets/AI/Python.png';
+import PyTorch from '../Assets/AI/PyTorch.avif';
+import R from '../Assets/AI/R.webp';
+import RecommendationSystems from '../Assets/AI/RecommendationSystems.jpg';
+import TensorFlow from '../Assets/AI/TensorFlow.png';
 
 const Datascience = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // Data for Data Science and AI
+  // Data for Data Science and AI with local images
   const dataScienceData = {
     overview: {
       title: "Data Science & AI Overview",
       description: "Data science combines statistics, programming, and domain expertise to extract insights from data. Artificial Intelligence (AI) focuses on creating systems that can perform tasks requiring human intelligence, often powered by data science techniques.",
-      image: "https://source.unsplash.com/random/800x500?datascience"
+      image: DataScienceOverview
     },
     techniques: {
       title: "Core Data Science Techniques",
       items: [
-        { name: "Machine Learning", image: "https://source.unsplash.com/random/300x200?machinelearning" },
-        { name: "Deep Learning", image: "https://source.unsplash.com/random/300x200?deeplearning" },
-        { name: "Natural Language Processing", image: "https://source.unsplash.com/random/300x200?nlp" },
-        { name: "Computer Vision", image: "https://source.unsplash.com/random/300x200?computervision" }
+        { name: "Machine Learning", image: MachineLearning },
+        { name: "Deep Learning", image: Deeplearning },
+        { name: "Natural Language Processing", image: NaturalLanguageProcessing },
+        { name: "Computer Vision", image: ComputerVision }
       ]
     },
     tools: {
       title: "Popular Data Science Tools",
       items: [
-        { name: "Python", image: "https://source.unsplash.com/random/300x200?python" },
-        { name: "R", image: "https://source.unsplash.com/random/300x200?rlanguage" },
-        { name: "TensorFlow", image: "https://source.unsplash.com/random/300x200?tensorflow" },
-        { name: "PyTorch", image: "https://source.unsplash.com/random/300x200?pytorch" }
+        { name: "Python", image: Python },
+        { name: "R", image: R },
+        { name: "TensorFlow", image: TensorFlow },
+        { name: "PyTorch", image: PyTorch }
       ]
     },
     applications: {
       title: "AI Applications",
       items: [
-        { name: "Predictive Analytics", image: "https://source.unsplash.com/random/300x200?predictiveanalytics" },
-        { name: "Chatbots", image: "https://source.unsplash.com/random/300x200?chatbot" },
-        { name: "Recommendation Systems", image: "https://source.unsplash.com/random/300x200?recommendation" },
-        { name: "Autonomous Vehicles", image: "https://source.unsplash.com/random/300x200?autonomousvehicle" }
+        { name: "Predictive Analytics", image: PredictiveAnalytics },
+        { name: "Chatbots", image: Chatbots },
+        { name: "Recommendation Systems", image: RecommendationSystems },
+        { name: "Autonomous Vehicles", image: AutonomousVehicles }
       ]
     }
   };
@@ -112,9 +126,6 @@ const Datascience = () => {
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "https://source.unsplash.com/random/300x200?data";
-          }}
         />
       </div>
       <div className="p-4">

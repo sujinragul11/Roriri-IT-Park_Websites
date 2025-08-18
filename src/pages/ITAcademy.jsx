@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sun, Moon, Star, Code, Database, Cloud, Smartphone, Globe, Shield, Menu, X, ChevronRight, Users, Award, BookOpen, Play, Home } from 'lucide-react';
+import { Sun, Moon, Star, Code, Database, Cloud, Smartphone, Globe, Shield, Menu, X, ChevronRight, Users, Award, BookOpen, Play, Home, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Fullstack from './Fullstack';
 import CloudComputing from './Cloudcomputing';
@@ -9,7 +9,7 @@ import UIUXDesign from './Uiux';
 import DataScience from './Datascience';
 import NexGenLogo from '../Assets/NexGen.png';
 
-const ITAcademy= () => {
+const ITAcademy = () => {
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -104,6 +104,10 @@ const ITAcademy= () => {
     setCurrentPage(page);
     window.scrollTo(0, 0);
     setIsMenuOpen(false); // Close mobile menu when navigating
+  };
+
+  const goBackToHome = () => {
+    setCurrentPage('home');
   };
 
   const courses = [
@@ -229,9 +233,7 @@ const ITAcademy= () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
-                  Start Your Journey
-                </button>
+                
                 <a href="#courses" className={`px-8 py-4 border-2 ${isDarkMode ? 'border-white hover:bg-white hover:text-gray-900' : 'border-gray-800 hover:bg-gray-800 hover:text-white'} font-bold rounded-lg transition-all duration-300 backdrop-blur-sm text-center`}>
                   View Courses
                 </a>
@@ -402,28 +404,25 @@ const ITAcademy= () => {
           </section>
 
           {/* CTA Section */}
-          {/* CTA Section */}
-<section className={`py-20 ${isDarkMode ? 'bg-gradient-to-r from-gray-900 to-blue-900' : 'bg-gradient-to-r from-blue-600 to-indigo-700'} text-white`}>
-  <div className="max-w-4xl mx-auto text-center px-4">
-    <h2 className="text-4xl md:text-5xl font-bold mb-6">
-      Ready to Start Your Tech Journey?
-    </h2>
-    <p className="text-xl mb-8">
-      Join thousands of successful graduates and transform your career today
-    </p>
-    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-      <button 
-        onClick={() => navigate('/register')} 
-        className="px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105"
-      >
-        Register Now
-      </button>
-      <button className="px-8 py-4 border-2 border-white hover:bg-white hover:text-blue-600 font-bold rounded-lg transition-all">
-        Download Brochure
-      </button>
-    </div>
-  </div>
-</section>
+          <section className={`py-20 ${isDarkMode ? 'bg-gradient-to-r from-gray-900 to-blue-900' : 'bg-gradient-to-r from-blue-600 to-indigo-700'} text-white`}>
+            <div className="max-w-4xl mx-auto text-center px-4">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                Ready to Start Your Tech Journey?
+              </h2>
+              <p className="text-xl mb-8">
+                Join thousands of successful graduates and transform your career today
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button 
+                  onClick={() => navigate('/register')} 
+                  className="px-8 py-4 bg-white text-blue-600 font-bold rounded-lg hover:bg-gray-100 transition-all transform hover:scale-105"
+                >
+                  Register Now
+                </button>
+                
+              </div>
+            </div>
+          </section>
         </>
       );
     } else {
@@ -431,8 +430,6 @@ const ITAcademy= () => {
       return (
         <div className="pt-16 pb-20">
           {selectedCourse?.component || <Fullstack />}
-          
-
         </div>
       );
     }
@@ -474,79 +471,106 @@ const ITAcademy= () => {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center space-x-8">
-              <button 
-  onClick={() => navigate('/')} 
-  className={`
-    flex items-center space-x-1 px-4 py-2 rounded-lg transition-all
-    ${isDarkMode 
-      ? 'bg-blue-700 text-white hover:bg-blue-800' 
-      : 'bg-blue-500 text-white hover:bg-blue-600'
-    }
-    font-medium shadow-sm hover:shadow-md
-  `}
->
-  <Home className="h-5 w-5" />
-  <span>𝐇𝐨𝐦𝐞</span>
-</button>
-
-                {currentPage === 'home' && (
+                {currentPage === 'home' ? (
                   <>
+                    <button 
+                      onClick={() => navigate('/')} 
+                      className={`
+                        flex items-center space-x-1 px-4 py-2 rounded-lg transition-all
+                        ${isDarkMode 
+                          ? 'bg-blue-700 text-white hover:bg-blue-800' 
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                        }
+                        font-medium shadow-sm hover:shadow-md
+                      `}
+                    >
+                      <Home className="h-5 w-5" />
+                      <span>𝐇𝐨𝐦𝐞</span>
+                    </button>
+
                     <button onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })} className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'} transition-colors font-medium`}>Courses</button>
                     <button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })} className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'} transition-colors font-medium`}>About</button>
                     <button onClick={scrollToContact} className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-700 hover:text-gray-900'} transition-colors font-medium`}>
                       Contact
                     </button>
                   </>
+                ) : (
+                  <button 
+                    onClick={goBackToHome}
+                    className={`
+                      flex items-center space-x-1 px-4 py-2 rounded-lg transition-all
+                      ${isDarkMode 
+                        ? 'bg-blue-700 text-white hover:bg-blue-800' 
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }
+                      font-medium shadow-sm hover:shadow-md
+                    `}
+                  >
+                    <ArrowLeft className="h-5 w-5" />
+                    <span>Back to Courses</span>
+                  </button>
                 )}
                 
-                {/* Theme Toggle - Desktop */}
-                <button
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className={`p-3 rounded-full ${isDarkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} hover:scale-110 transition-all duration-300 shadow-lg`}
-                  title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-                >
-                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                </button>
-
-
+                {/* Theme Toggle - Desktop - Only show on home page */}
+                {currentPage === 'home' && (
+                  <button
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    className={`p-3 rounded-full ${isDarkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} hover:scale-110 transition-all duration-300 shadow-lg`}
+                    title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                  >
+                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  </button>
+                )}
               </div>
 
               {/* Mobile menu button */}
               <div className="md:hidden flex items-center space-x-3">
-                <button
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-all duration-300`}
-                  title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-                >
-                  {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                </button>
-                <button
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className={`p-2 rounded-lg ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'} transition-colors`}
-                >
-                  {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
+                {/* Theme Toggle - Mobile - Only show on home page */}
+                {currentPage === 'home' && (
+                  <button
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-all duration-300`}
+                    title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                  >
+                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                  </button>
+                )}
+                
+                {/* Show back button on course pages */}
+                {currentPage !== 'home' && (
+                  <button 
+                    onClick={goBackToHome}
+                    className={`p-2 rounded-full ${isDarkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'} transition-all duration-300`}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                )}
+                
+                {/* Menu button - Only show on home page */}
+                {currentPage === 'home' && (
+                  <button
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    className={`p-2 rounded-lg ${isDarkMode ? 'text-white hover:bg-gray-800' : 'text-gray-900 hover:bg-gray-100'} transition-colors`}
+                  >
+                    {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                  </button>
+                )}
               </div>
             </div>
 
-            {/* Mobile Menu */}
-            {isMenuOpen && (
+            {/* Mobile Menu - Only show on home page */}
+            {isMenuOpen && currentPage === 'home' && (
               <div className={`md:hidden py-4 ${isDarkMode ? 'bg-gray-900' : 'bg-white'} border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
                 <div className="flex flex-col space-y-4">
                   <button onClick={() => navigate('/')} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left flex items-center space-x-2`}>
                     <Home className="w-5 h-5" />
                     <span>Home</span>
                   </button>
-                  {currentPage === 'home' && (
-                    <>
-                      <button onClick={() => {document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); setIsMenuOpen(false);}} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left`}>Courses</button>
-                      <button onClick={() => {document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); setIsMenuOpen(false);}} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left`}>About</button>
-                      <button onClick={() => {scrollToContact(); setIsMenuOpen(false);}} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left`}>
-                        Contact
-                      </button>
-                    </>
-                  )}
-
+                  <button onClick={() => {document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); setIsMenuOpen(false);}} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left`}>Courses</button>
+                  <button onClick={() => {document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); setIsMenuOpen(false);}} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left`}>About</button>
+                  <button onClick={() => {scrollToContact(); setIsMenuOpen(false);}} className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'} px-4 py-2 text-left`}>
+                    Contact
+                  </button>
                 </div>
               </div>
             )}
@@ -555,8 +579,6 @@ const ITAcademy= () => {
 
         {/* Main Content */}
         {renderCurrentPage()}
-
-
 
         {/* Footer - Only show on home page */}
         {currentPage === 'home' && (
@@ -572,7 +594,7 @@ const ITAcademy= () => {
                 <div>
                   <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
                   <ul className="space-y-2">
-                    <li><button onClick={() => navigate('/')} className="text-gray-300 hover:text-white transition-colors">Home</button></li>
+
                     <li><button onClick={() => {navigateTo('home'); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' });}} className="text-gray-300 hover:text-white transition-colors">Courses</button></li>
                     <li><button onClick={() => {navigateTo('home'); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });}} className="text-gray-300 hover:text-white transition-colors">About</button></li>
                   </ul>
@@ -581,32 +603,54 @@ const ITAcademy= () => {
                   <h3 className="text-lg font-semibold mb-4 text-white">Contact Us</h3>
                   <ul className="space-y-2 text-gray-300">
                     <li>RORIRI IT PARK,<br />NALLANATHAPURAM,<br />KALAKAD</li>
-                    <li>contact@roririsoft.com</li>
+                    <li>admin@roririsoft.com</li>
                     <li>(+91) 7338941579</li>
                   </ul>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold mb-4 text-white">Follow Us</h3>
-                  <div className="flex space-x-4">
-                    <a href="#" className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 shadow transition-colors">
-                      <span className="sr-only">Facebook</span>
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-                      </svg>
-                    </a>
-                    <a href="#" className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 shadow transition-colors">
-                      <span className="sr-only">Twitter</span>
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                      </svg>
-                    </a>
-                    <a href="#" className="p-2 rounded-full bg-gray-800 hover:bg-gray-700 shadow transition-colors">
-                      <span className="sr-only">LinkedIn</span>
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                      </svg>
-                    </a>
-                  </div>
+                  <div className="flex space-x-4 mb-4">
+                  <a 
+                    href="https://www.facebook.com/share/1AwRCwxgMT/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-orange-500 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                    </svg>
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/roriri_it_park/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-orange-500 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.023.047 1.351.058 3.807.058h.468c2.456 0 2.784-.011 3.807-.058.975-.045 1.504-.207 1.857-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.047-1.023.058-1.351.058-3.807v-.468c0-2.456-.011-2.784-.058-3.807-.045-.975-.207-1.504-.344-1.857a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" />
+                    </svg>
+                  </a>
+                  <a 
+                    href="http://www.youtube.com/@Roriri_soft" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-orange-500 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                    </svg>
+                  </a>
+                  <a 
+                    href="https://www.linkedin.com/company/roriri-software-solutions-pvt-ltd/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-400 hover:text-orange-500 transition-colors"
+                  >
+                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                  </a>
+                </div>
                 </div>
               </div>
               <div className="mt-12 pt-8 border-t border-gray-700 text-gray-400 text-sm text-center">
@@ -618,6 +662,6 @@ const ITAcademy= () => {
       </div>
     </div>
   );
-};
+}
 
 export default ITAcademy;

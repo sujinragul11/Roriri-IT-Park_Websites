@@ -1,52 +1,66 @@
 // fullstack.jsx
 import { useState, useEffect } from 'react';
 
+// Import static images from your Assets folder
+import overviewImage from '../Assets/FullStack.png';
+import reactImage from '../Assets/React.png';
+import vueImage from '../Assets/Vua.png'; // Note: File is named "Vua.png" in your folder
+import angularImage from '../Assets/Angular.jpg';
+import htmlcssImage from '../Assets/htmlcss.jpg'; // Note: This file doesn't exist in your list - you might need to add it
+import nodejsImage from '../Assets/Nodejs.png';
+import expressImage from '../Assets/express.jpg'; // Note: This file doesn't exist in your list
+import djangoImage from '../Assets/django.jpg'; // Note: This file doesn't exist in your list
+import springbootImage from '../Assets/spring-boot-logo.png';
+import mongodbImage from '../Assets/mongodb.jpg'; // Note: This file doesn't exist in your list
+import postgresqlImage from '../Assets/Postgresql.png';
+import mysqlImage from '../Assets/Mysql.jpg';
+import firebaseImage from '../Assets/Firebase.png';
+import fallbackImage from '../Assets/Company.png'; // Using Company.png as fallback since no fallback.jpg exists
+
 const Fullstack = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
-  const [techImages, setTechImages] = useState({});
 
-  // Mock data for full-stack development
+  // Mock data for full-stack development with static images
   const fullstackData = {
     overview: {
       title: "Full-Stack Development Overview",
       description: "Full-stack development involves working on both front-end (client-side) and back-end (server-side) portions of web applications. A full-stack developer can handle databases, servers, systems engineering, and clients.",
-      image: "https://source.unsplash.com/random/800x500?webdevelopment"
+      image: overviewImage
     },
     frontend: {
       title: "Front-End Technologies",
       items: [
-        { name: "React", image: "https://source.unsplash.com/random/300x200?react" },
-        { name: "Vue", image: "https://source.unsplash.com/random/300x200?vue" },
-        { name: "Angular", image: "https://source.unsplash.com/random/300x200?angular" },
-        { name: "HTML/CSS", image: "https://source.unsplash.com/random/300x200?htmlcss" }
+        { name: "React", image: reactImage },
+        { name: "Vue", image: vueImage },
+        { name: "Angular", image: angularImage },
+        { name: "HTML/CSS", image: htmlcssImage || fallbackImage } // Fallback if image doesn't exist
       ]
     },
     backend: {
       title: "Back-End Technologies",
       items: [
-        { name: "Node.js", image: "https://source.unsplash.com/random/300x200?nodejs" },
-        { name: "Express", image: "https://source.unsplash.com/random/300x200?expressjs" },
-        { name: "Django", image: "https://source.unsplash.com/random/300x200?django" },
-        { name: "Spring Boot", image: "https://source.unsplash.com/random/300x200?springboot" }
+        { name: "Node.js", image: nodejsImage },
+        { name: "Express", image: expressImage || fallbackImage },
+        { name: "Django", image: djangoImage || fallbackImage },
+        { name: "Spring Boot", image: springbootImage }
       ]
     },
     database: {
       title: "Database Technologies",
       items: [
-        { name: "MongoDB", image: "https://source.unsplash.com/random/300x200?mongodb" },
-        { name: "PostgreSQL", image: "https://source.unsplash.com/random/300x200?postgresql" },
-        { name: "MySQL", image: "https://source.unsplash.com/random/300x200?mysql" },
-        { name: "Firebase", image: "https://source.unsplash.com/random/300x200?firebase" }
+        { name: "MongoDB", image: mongodbImage || fallbackImage },
+        { name: "PostgreSQL", image: postgresqlImage },
+        { name: "MySQL", image: mysqlImage },
+        { name: "Firebase", image: firebaseImage }
       ]
     }
   };
 
   useEffect(() => {
-    // Simulate loading images
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, []);
@@ -85,6 +99,7 @@ const Fullstack = () => {
                 src={fullstackData.overview.image} 
                 alt="Fullstack Development" 
                 className="rounded-lg shadow-xl w-full h-auto"
+                loading="lazy"
               />
             </div>
             <div className="md:w-1/2">
@@ -113,8 +128,9 @@ const Fullstack = () => {
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
+          loading="lazy"
           onError={(e) => {
-            e.target.src = "https://source.unsplash.com/random/300x200?code";
+            e.target.src = fallbackImage;
           }}
         />
       </div>
@@ -162,9 +178,6 @@ const Fullstack = () => {
             {renderContent()}
           </div>
         )}
-
-        {/* Footer */}
-        
       </div>
     </div>
   );

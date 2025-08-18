@@ -46,7 +46,7 @@ const NotFound = () => {
             {/* Quick Links */}
             <div className="pt-8 border-t border-gray-200">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Or explore our businesses:
+                Or explore our Organizations:
               </h3>
               <div className="grid grid-cols-1 gap-2">
                 <Link

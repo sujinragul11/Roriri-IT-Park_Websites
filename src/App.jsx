@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -27,11 +27,28 @@ import ITAcademy from './pages/ITAcademy';
 import RegistrationForm from './pages/RegistrationForm';
 import NotFound from './pages/NotFound';
 
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
+import RefundPolicy from './components/RefundPolicy';
+import CookiePolicy from './components/CookiePolicy';
+
+// ScrollToTop component
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <div className="min-h-screen bg-gray-50">
             <Routes>
               {/* Public Routes */}
@@ -41,6 +58,10 @@ function App() {
                 <Route path="rithishfarms" element={<RithishFarms />} />
                 <Route path="roshantiles" element={<RoshanTiles />} />
                 <Route path="industrialvisits" element={<IndustrialVisits />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/refund-policy" element={<RefundPolicy />} />
+                <Route path="/cookie-policy" element={<CookiePolicy />} />
               </Route>
               
               {/* IT Academy Registration */}

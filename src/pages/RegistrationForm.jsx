@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 
 const RegistrationForm = () => {
+  const navigate = useNavigate(); // Initialize navigate function
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -16,6 +18,7 @@ const RegistrationForm = () => {
   const [isVisible, setIsVisible] = useState({});
   const [particles, setParticles] = useState([]);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [showSuccess, setShowSuccess] = useState(false); // State for success popup
 
   // Generate floating particles
   useEffect(() => {
@@ -71,15 +74,17 @@ const RegistrationForm = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     
-    // Celebration animation
-    const celebration = document.createElement('div');
-    celebration.innerHTML = '🎉 Registration Complete! 🎉';
-    celebration.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl font-bold text-white bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 rounded-full shadow-2xl z-50 animate-bounce';
-    document.body.appendChild(celebration);
+    // Show success message
+    setShowSuccess(true);
     
+    // After 3 seconds, navigate back to ITAcademy page
     setTimeout(() => {
-      document.body.removeChild(celebration);
+      navigate('/itacademy'); // Adjust the route as needed
     }, 3000);
+  };
+
+  const handleBackToAcademy = () => {
+    navigate('/itacademy'); // Adjust the route as needed
   };
 
   const formSteps = [
@@ -103,6 +108,34 @@ const RegistrationForm = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
+      {/* Back Button */}
+      <button
+        onClick={handleBackToAcademy}
+        className="absolute top-6 left-6 z-50 px-4 py-2 bg-white/10 backdrop-blur-md text-white rounded-lg border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 flex items-center"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+        </svg>
+        Back to Academy
+      </button>
+
+      {/* Success Popup */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-8 rounded-3xl shadow-2xl max-w-md w-full mx-4 text-center animate-bounce">
+            <div className="text-6xl mb-4">🎉</div>
+            <h2 className="text-3xl font-bold text-white mb-4">Registration Successful!</h2>
+            <p className="text-white/90 mb-6">We've sent a confirmation to your email. Welcome to our academy!</p>
+            <div className="w-full h-2 bg-white/30 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-white rounded-full" 
+                style={{ animation: 'progressBar 3s linear forwards' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Animated Background Particles */}
       <div className="absolute inset-0 overflow-hidden">
         {particles.map(particle => (
@@ -414,9 +447,14 @@ const RegistrationForm = () => {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.05); }
         }
+        
+        @keyframes progressBar {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
       `}</style>
     </div>
   );
 };
 
-export default RegistrationForm;  
+export default RegistrationForm;

@@ -5,40 +5,40 @@ const Cybersecurity = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // Cybersecurity data
+  // Cybersecurity data with local image paths
   const cyberData = {
     overview: {
       title: "Cybersecurity",
       description: "Master the art of protecting systems, networks, and programs from digital attacks. Learn ethical hacking techniques, network security fundamentals, and digital forensics to become a skilled cybersecurity professional.",
       duration: "7 months",
       level: "Intermediate",
-      image: "https://source.unsplash.com/random/800x500?cybersecurity"
+      image: "/src/Assets/CyberSecurity/Cybersecurity.jpg"
     },
     domains: {
       title: "Security Domains",
       items: [
-        { name: "Ethical Hacking", image: "https://source.unsplash.com/random/300x200?hacking" },
-        { name: "Network Security", image: "https://source.unsplash.com/random/300x200?networksecurity" },
-        { name: "Digital Forensics", image: "https://source.unsplash.com/random/300x200?forensics" },
-        { name: "Cryptography", image: "https://source.unsplash.com/random/300x200?cryptography" }
+        { name: "Ethical Hacking", image: "/src/Assets/CyberSecurity/EthicalHacking.jpg" },
+        { name: "Network Security", image: "/src/Assets/CyberSecurity/NetworkSecurity.jpg" },
+        { name: "Digital Forensics", image: "/src/Assets/CyberSecurity/DigitalForensics.jpg" },
+        { name: "Cryptography", image: "/src/Assets/CyberSecurity/Cryptography.jpg" }
       ]
     },
     tools: {
       title: "Security Tools",
       items: [
-        { name: "Kali Linux", image: "https://source.unsplash.com/random/300x200?kalilinux" },
-        { name: "Wireshark", image: "https://source.unsplash.com/random/300x200?wireshark" },
-        { name: "Metasploit", image: "https://source.unsplash.com/random/300x200?metasploit" },
-        { name: "Nmap", image: "https://source.unsplash.com/random/300x200?nmap" }
+        { name: "Kali Linux", image: "/src/Assets/CyberSecurity/KaliLinux.jpg" },
+        { name: "Wireshark", image: "/src/Assets/CyberSecurity/Wireshark.jpg" },
+        { name: "Metasploit", image: "/src/Assets/CyberSecurity/Metasploit.jpg" },
+        { name: "Nmap", image: "/src/Assets/CyberSecurity/Nmap.jpg" }
       ]
     },
     certifications: {
       title: "Career Paths",
       items: [
-        { name: "Security Analyst", image: "https://source.unsplash.com/random/300x200?securityanalyst" },
-        { name: "Penetration Tester", image: "https://source.unsplash.com/random/300x200?pentester" },
-        { name: "Forensic Expert", image: "https://source.unsplash.com/random/300x200?forensicexpert" },
-        { name: "Security Architect", image: "https://source.unsplash.com/random/300x200?securityarchitect" }
+        { name: "Security Analyst", image: "/src/Assets/CyberSecurity/SecurityAnalyst.jpg" },
+        { name: "Penetration Tester", image: "/src/Assets/CyberSecurity/PenetrationTester.webp" },
+        { name: "Forensic Expert", image: "/src/Assets/CyberSecurity/ForensicExpert.webp" },
+        { name: "Security Architect", image: "/src/Assets/CyberSecurity/SecurityArchitect.webp" }
       ]
     }
   };
@@ -123,7 +123,7 @@ const Cybersecurity = () => {
           alt={name} 
           className="w-full h-full object-cover"
           onError={(e) => {
-            e.target.src = "https://source.unsplash.com/random/300x200?security";
+            e.target.src = "/src/Assets/CyberSecurity/Cybersecurity.jpg"; // Fallback image
           }}
         />
       </div>

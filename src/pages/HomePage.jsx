@@ -151,7 +151,7 @@ const HomePage = () => {
                   onClick={() => setIsModalOpen(true)}
                   className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
                 >
-                  <span>Our Businesses</span>
+                  <span>Our Organizations</span>
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
                 
@@ -382,24 +382,14 @@ const HomePage = () => {
           </h2>
           
           <p className="text-base sm:text-lg lg:text-xl text-blue-100 mb-8 max-w-2xl mx-auto font-normal">
-            Whether you're looking to upgrade your skills, grow your business, or explore new opportunities - 
+            Whether you're looking to upgrade your skills, grow your Organizations, or explore new opportunities - 
             we're here to power your journey with cutting-edge solutions.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="group px-8 py-4 bg-white text-blue-600 font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-              <span className="flex items-center justify-center">
-                Get Started Today
-                <Zap className="ml-2 h-5 w-5 group-hover:animate-bounce" />
-              </span>
-            </button>
             
-            <button className="group px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-blue-600 transform hover:scale-105 transition-all duration-300">
-              <span className="flex items-center justify-center">
-                Contact Us
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-            </button>
+            
+            
           </div>
         </div>
       </section>
@@ -411,7 +401,7 @@ const HomePage = () => {
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-                  Our Business Portfolio
+                  Our Organization Portfolio
                 </h2>
                 <button
                   onClick={() => setIsModalOpen(false)}
@@ -456,13 +446,7 @@ const HomePage = () => {
                           </div>
                         </div>
                         
-                        <a
-                          href={business.href}
-                          className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-bold text-sm group-hover:translate-x-1 transition-all duration-300"
-                        >
-                          <span>Learn More</span>
-                          <ArrowRight className="h-3 w-3 group-hover:animate-pulse" />
-                        </a>
+                      
                       </div>
                     </div>
                   </div>

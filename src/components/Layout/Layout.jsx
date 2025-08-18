@@ -20,6 +20,7 @@ const Layout = () => {
       </main>
       {shouldShowFooter && <Footer />}
     </div>
+    
   );
 };
 

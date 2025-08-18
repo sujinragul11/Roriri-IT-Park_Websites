@@ -1,44 +1,59 @@
 // UIUXDesign.jsx
 import { useState, useEffect } from 'react';
 
+// Import your local images
+import AdobeXD from '../Assets/UIUX/AdobeXD.jpg';
+import ColorTheory from '../Assets/UIUX/ColorTheary.jpg';
+import ComponentLibrary from '../Assets/UIUX/ComponentLibrary.jpg';
+import DesignTokens from '../Assets/UIUX/DesignTokens.jpg';
+import Figma from '../Assets/UIUX/Figma.jpg';
+import Photoshop from '../Assets/UIUX/Photoshop.webp';
+import Prototyping from '../Assets/UIUX/Prototyping.jpg';
+import Sketch from '../Assets/UIUX/Sketch.jpg';
+import Typography from '../Assets/UIUX/Typography.jpg';
+import UiDesign from '../Assets/UIUX/UiDesign.avif';
+import UsabilityTesting from '../Assets/UIUX/UsabilityTesting.jpg';
+import UserResearch from '../Assets/UIUX/UserResearch.jpg';
+import Wireframing from '../Assets/UIUX/Wireframing.jpg';
+
 const Uiux = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // UI/UX Design data
+  // UI/UX Design data with local images
   const designData = {
     overview: {
       title: "UI/UX Design",
       description: "Master the principles of user interface and user experience design. Learn industry-standard tools like Figma and Adobe XD, conduct user research, and create comprehensive design systems for professional digital products.",
       duration: "4 months",
       level: "Beginner",
-      image: "https://source.unsplash.com/random/800x500?uidesign"
+      image: UiDesign
     },
     tools: {
       title: "Design Tools",
       items: [
-        { name: "Figma", image: "https://source.unsplash.com/random/300x200?figma" },
-        { name: "Adobe XD", image: "https://source.unsplash.com/random/300x200?adobexd" },
-        { name: "Sketch", image: "https://source.unsplash.com/random/300x200?sketchapp" },
-        { name: "Photoshop", image: "https://source.unsplash.com/random/300x200?photoshop" }
+        { name: "Figma", image: Figma },
+        { name: "Adobe XD", image: AdobeXD },
+        { name: "Sketch", image: Sketch },
+        { name: "Photoshop", image: Photoshop }
       ]
     },
     techniques: {
       title: "Design Techniques",
       items: [
-        { name: "User Research", image: "https://source.unsplash.com/random/300x200?userresearch" },
-        { name: "Wireframing", image: "https://source.unsplash.com/random/300x200?wireframe" },
-        { name: "Prototyping", image: "https://source.unsplash.com/random/300x200?prototype" },
-        { name: "Usability Testing", image: "https://source.unsplash.com/random/300x200?usability" }
+        { name: "User Research", image: UserResearch },
+        { name: "Wireframing", image: Wireframing },
+        { name: "Prototyping", image: Prototyping },
+        { name: "Usability Testing", image: UsabilityTesting }
       ]
     },
     systems: {
       title: "Design Systems",
       items: [
-        { name: "Color Theory", image: "https://source.unsplash.com/random/300x200?colortheory" },
-        { name: "Typography", image: "https://source.unsplash.com/random/300x200?typography" },
-        { name: "Component Library", image: "https://source.unsplash.com/random/300x200?components" },
-        { name: "Design Tokens", image: "https://source.unsplash.com/random/300x200?designtokens" }
+        { name: "Color Theory", image: ColorTheory },
+        { name: "Typography", image: Typography },
+        { name: "Component Library", image: ComponentLibrary },
+        { name: "Design Tokens", image: DesignTokens }
       ]
     }
   };
@@ -122,9 +137,6 @@ const Uiux = () => {
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "https://source.unsplash.com/random/300x200?design";
-          }}
         />
       </div>
       <div className="p-4">
@@ -204,9 +216,6 @@ const Uiux = () => {
             ))}
           </div>
         </div>
-
-        {/* Footer */}
-        
       </div>
     </div>
   );

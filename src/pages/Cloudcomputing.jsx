@@ -1,43 +1,42 @@
-// CloudComputing.jsx
 import { useState, useEffect } from 'react';
 
 const CloudComputing = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // Cloud computing data
+  // Cloud computing data with local image paths
   const cloudData = {
     overview: {
       title: "Cloud Computing Mastery",
       description: "Cloud computing delivers computing services—servers, storage, databases, networking, software, analytics, and more—over the Internet ('the cloud'). This program covers AWS, Azure, Google Cloud, DevOps, and Kubernetes at an intermediate to advanced level.",
       duration: "5 months",
       level: "Intermediate to Advanced",
-      image: "https://source.unsplash.com/random/800x500?cloudcomputing"
+      image: "/src/Assets/CloudComputing/CloudComputingMastery.jpg"
     },
     platforms: {
       title: "Cloud Platforms",
       items: [
-        { name: "AWS", image: "https://source.unsplash.com/random/300x200?aws" },
-        { name: "Azure", image: "https://source.unsplash.com/random/300x200?azure" },
-        { name: "Google Cloud", image: "https://source.unsplash.com/random/300x200?googlecloud" }
+        { name: "AWS", image: "/src/Assets/CloudComputing/AWS.jpg" },
+        { name: "Azure", image: "/src/Assets/CloudComputing/Azure.jpg" },
+        { name: "Google Cloud", image: "/src/Assets/CloudComputing/GoogleCloud.jpg" }
       ]
     },
     technologies: {
       title: "Cloud Technologies",
       items: [
-        { name: "DevOps", image: "https://source.unsplash.com/random/300x200?devops" },
-        { name: "Kubernetes", image: "https://source.unsplash.com/random/300x200?kubernetes" },
-        { name: "Docker", image: "https://source.unsplash.com/random/300x200?docker" },
-        { name: "Terraform", image: "https://source.unsplash.com/random/300x200?terraform" }
+        { name: "DevOps", image: "/src/Assets/CloudComputing/DevOps.jpg" },
+        { name: "Kubernetes", image: "/src/Assets/CloudComputing/Kubernetes.webp" },
+        { name: "Docker", image: "/src/Assets/CloudComputing/Docker.jpg" },
+        { name: "Terraform", image: "/src/Assets/CloudComputing/CloudComputingMastery.jpg" } // Placeholder - you might want to add a Terraform image
       ]
     },
     services: {
       title: "Cloud Services",
       items: [
-        { name: "Compute", image: "https://source.unsplash.com/random/300x200?cloudcompute" },
-        { name: "Storage", image: "https://source.unsplash.com/random/300x200?cloudstorage" },
-        { name: "Networking", image: "https://source.unsplash.com/random/300x200?cloudnetworking" },
-        { name: "Databases", image: "https://source.unsplash.com/random/300x200?clouddatabase" }
+        { name: "Compute", image: "/src/Assets/CloudComputing/Compute.jpg" },
+        { name: "Storage", image: "/src/Assets/CloudComputing/Storage.avif" },
+        { name: "Networking", image: "/src/Assets/CloudComputing/Networking.jpg" },
+        { name: "Databases", image: "/src/Assets/CloudComputing/Databases.jpg" }
       ]
     }
   };
@@ -84,6 +83,9 @@ const CloudComputing = () => {
                 src={cloudData.overview.image} 
                 alt="Cloud Computing Overview" 
                 className="rounded-lg shadow-xl w-full h-auto"
+                onError={(e) => {
+                  e.target.src = "/src/Assets/CloudComputing/CloudComputingMastery.jpg";
+                }}
               />
             </div>
             <div className="md:w-1/2">
@@ -122,7 +124,7 @@ const CloudComputing = () => {
           alt={name} 
           className="w-full h-full object-cover"
           onError={(e) => {
-            e.target.src = "https://source.unsplash.com/random/300x200?cloud";
+            e.target.src = "/src/Assets/CloudComputing/CloudComputingMastery.jpg";
           }}
         />
       </div>
@@ -192,8 +194,6 @@ const CloudComputing = () => {
             ))}
           </div>
         </div>
-
-        
       </div>
     </div>
   );
