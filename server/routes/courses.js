@@ -1,46 +1,79 @@
 const express = require('express');
-const db = require('../database/init');
+const { prisma } = require('../config/database');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 const { sendEmail } = require('../utils/email');
 
 const router = express.Router();
 
 // Get all courses
-router.get('/', (req, res) => {
-  db.all(
-    `SELECT c.*, i.name as instructor_name, i.image_url as instructor_image
-     FROM courses c 
-     LEFT JOIN instructors i ON c.instructor_id = i.id 
-     WHERE c.is_active = 1 
-     ORDER BY c.created_at DESC`,
-    (err, courses) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
-      }
-      res.json(courses);
-    }
-  );
+router.get('/', async (req, res) => {
+  try {
+    const courses = await prisma.course.findMany({
+      where: { isActive: true },
+      include: {
+        instructor: {
+          select: {
+            name: true,
+            imageUrl: true,
+            bio: true,
+            experience: true
+          }
+        },
+        _count: {
+          select: {
+            enrollments: true
+          }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.json(courses);
+  } catch (error) {
+    console.error('Get courses error:', error);
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
 });
 
 // Get single course
-router.get('/:id', (req, res) => {
-  db.get(
-    `SELECT c.*, i.name as instructor_name, i.bio as instructor_bio, 
-            i.experience as instructor_experience, i.image_url as instructor_image
-     FROM courses c 
-     LEFT JOIN instructors i ON c.instructor_id = i.id 
-     WHERE c.id = ? AND c.is_active = 1`,
-    [req.params.id],
-    (err, course) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
+router.get('/:id', async (req, res) => {
+  try {
+    const course = await prisma.course.findFirst({
+      where: { 
+        id: req.params.id,
+        isActive: true 
+      },
+      include: {
+        instructor: {
+          select: {
+            name: true,
+            bio: true,
+            experience: true,
+            imageUrl: true,
+            expertise: true
+          }
+        },
+        enrollments: {
+          select: {
+            id: true,
+            studentName: true,
+            createdAt: true
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 10
+        }
       }
-      if (!course) {
-        return res.status(404).json({ error: 'Course not found' });
-      }
-      res.json(course);
+    });
+
+    if (!course) {
+      return res.status(404).json({ error: 'Course not found' });
     }
-  );
+
+    res.json(course);
+  } catch (error) {
+    console.error('Get course error:', error);
+    res.status(500).json({ error: 'Failed to fetch course' });
+  }
 });
 
 // Enroll in course
@@ -52,84 +85,113 @@ router.post('/:id/enroll', async (req, res) => {
     return res.status(400).json({ error: 'Name and email are required' });
   }
 
-  // Check if course exists
-  db.get('SELECT * FROM courses WHERE id = ? AND is_active = 1', [courseId], (err, course) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
-    }
+  try {
+    // Check if course exists
+    const course = await prisma.course.findFirst({
+      where: { 
+        id: courseId,
+        isActive: true 
+      }
+    });
+
     if (!course) {
       return res.status(404).json({ error: 'Course not found' });
     }
 
-    // Insert enrollment
-    db.run(
-      `INSERT INTO course_enrollments (course_id, student_name, student_email, student_phone, preferred_batch)
-       VALUES (?, ?, ?, ?, ?)`,
-      [courseId, studentName, studentEmail, studentPhone, preferredBatch],
-      async function(err) {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to enroll' });
-        }
-
-        // Send confirmation email
-        try {
-          await sendEmail({
-            to: studentEmail,
-            subject: 'Course Enrollment Confirmation',
-            text: `Thank you for enrolling in ${course.title}! We'll contact you soon with further details.`
-          });
-        } catch (emailErr) {
-          console.error('Email error:', emailErr);
-        }
-
-        res.json({ message: 'Enrollment successful', enrollmentId: this.lastID });
+    // Create enrollment
+    const enrollment = await prisma.courseEnrollment.create({
+      data: {
+        courseId,
+        studentName,
+        studentEmail,
+        studentPhone,
+        preferredBatch
       }
-    );
-  });
+    });
+
+    // Send confirmation email
+    try {
+      await sendEmail({
+        to: studentEmail,
+        subject: 'Course Enrollment Confirmation',
+        text: `Thank you for enrolling in ${course.title}! We'll contact you soon with further details.`
+      });
+    } catch (emailErr) {
+      console.error('Email error:', emailErr);
+    }
+    res.json({ message: 'Enrollment successful', enrollmentId: enrollment.id });
+  } catch (error) {
+    console.error('Enrollment error:', error);
+    res.status(500).json({ error: 'Failed to enroll in course' });
+  }
 });
 
 // Admin routes
-router.post('/', authenticateToken, requireAdmin, (req, res) => {
+router.post('/', authenticateToken, requireAdmin, async (req, res) => {
   const { title, description, duration, price, instructorId, imageUrl, level, technologies } = req.body;
 
-  db.run(
-    `INSERT INTO courses (title, description, duration, price, instructor_id, image_url, level, technologies)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [title, description, duration, price, instructorId, imageUrl, level, technologies],
-    function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to create course' });
+  if (!title || !description || !duration || !price) {
+    return res.status(400).json({ error: 'Title, description, duration, and price are required' });
+  }
+
+  try {
+    const course = await prisma.course.create({
+      data: {
+        title,
+        description,
+        duration,
+        price: parseFloat(price),
+        instructorId,
+        imageUrl,
+        level: level || 'BEGINNER',
+        technologies
       }
-      res.json({ message: 'Course created successfully', courseId: this.lastID });
-    }
-  );
+    });
+
+    res.status(201).json({ message: 'Course created successfully', courseId: course.id });
+  } catch (error) {
+    console.error('Create course error:', error);
+    res.status(500).json({ error: 'Failed to create course' });
+  }
 });
 
-router.put('/:id', authenticateToken, requireAdmin, (req, res) => {
+router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
   const { title, description, duration, price, instructorId, imageUrl, level, technologies } = req.body;
 
-  db.run(
-    `UPDATE courses 
-     SET title = ?, description = ?, duration = ?, price = ?, instructor_id = ?, 
-         image_url = ?, level = ?, technologies = ?
-     WHERE id = ?`,
-    [title, description, duration, price, instructorId, imageUrl, level, technologies, req.params.id],
-    function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to update course' });
+  try {
+    const course = await prisma.course.update({
+      where: { id: req.params.id },
+      data: {
+        ...(title && { title }),
+        ...(description && { description }),
+        ...(duration && { duration }),
+        ...(price && { price: parseFloat(price) }),
+        ...(instructorId && { instructorId }),
+        ...(imageUrl && { imageUrl }),
+        ...(level && { level }),
+        ...(technologies && { technologies })
       }
-      res.json({ message: 'Course updated successfully' });
-    }
-  );
+    });
+
+    res.json({ message: 'Course updated successfully', course });
+  } catch (error) {
+    console.error('Update course error:', error);
+    res.status(500).json({ error: 'Failed to update course' });
+  }
 });
 
-router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
-  db.run('UPDATE courses SET is_active = 0 WHERE id = ?', [req.params.id], function(err) {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to delete course' });
-    }
+router.delete('/:id', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    await prisma.course.update({
+      where: { id: req.params.id },
+      data: { isActive: false }
+    });
+
     res.json({ message: 'Course deleted successfully' });
-  });
+  } catch (error) {
+    console.error('Delete course error:', error);
+    res.status(500).json({ error: 'Failed to delete course' });
+  }
 });
 
 module.exports = router;

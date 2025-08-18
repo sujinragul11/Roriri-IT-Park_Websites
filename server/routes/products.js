@@ -1,101 +1,130 @@
 const express = require('express');
-const db = require('../database/init');
+const { prisma } = require('../config/database');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Get all products
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const { category, color, size, minPrice, maxPrice } = req.query;
-  let query = 'SELECT * FROM products WHERE is_active = 1';
-  const params = [];
+  
+  const where = { isActive: true };
 
   if (category) {
-    query += ' AND category = ?';
-    params.push(category);
+    where.category = category;
   }
   if (color) {
-    query += ' AND color = ?';
-    params.push(color);
+    where.color = color;
   }
   if (size) {
-    query += ' AND size = ?';
-    params.push(size);
+    where.size = size;
   }
-  if (minPrice) {
-    query += ' AND price >= ?';
-    params.push(minPrice);
-  }
-  if (maxPrice) {
-    query += ' AND price <= ?';
-    params.push(maxPrice);
+  if (minPrice || maxPrice) {
+    where.price = {};
+    if (minPrice) where.price.gte = parseFloat(minPrice);
+    if (maxPrice) where.price.lte = parseFloat(maxPrice);
   }
 
-  query += ' ORDER BY created_at DESC';
+  try {
+    const products = await prisma.product.findMany({
+      where,
+      orderBy: { createdAt: 'desc' }
+    });
 
-  db.all(query, params, (err, products) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
-    }
     res.json(products);
-  });
+  } catch (error) {
+    console.error('Get products error:', error);
+    res.status(500).json({ error: 'Failed to fetch products' });
+  }
 });
 
 // Get single product
-router.get('/:id', (req, res) => {
-  db.get('SELECT * FROM products WHERE id = ? AND is_active = 1', [req.params.id], (err, product) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
-    }
+router.get('/:id', async (req, res) => {
+  try {
+    const product = await prisma.product.findFirst({
+      where: { 
+        id: req.params.id,
+        isActive: true 
+      }
+    });
+
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
+
     res.json(product);
-  });
+  } catch (error) {
+    console.error('Get product error:', error);
+    res.status(500).json({ error: 'Failed to fetch product' });
+  }
 });
 
 // Admin routes
-router.post('/', authenticateToken, requireAdmin, (req, res) => {
+router.post('/', authenticateToken, requireAdmin, async (req, res) => {
   const { name, description, category, size, color, price, stockQuantity, imageUrls } = req.body;
 
-  db.run(
-    `INSERT INTO products (name, description, category, size, color, price, stock_quantity, image_urls)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [name, description, category, size, color, price, stockQuantity, JSON.stringify(imageUrls)],
-    function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to create product' });
+  if (!name || !description || !price) {
+    return res.status(400).json({ error: 'Name, description, and price are required' });
+  }
+
+  try {
+    const product = await prisma.product.create({
+      data: {
+        name,
+        description,
+        category: category || 'FLOOR',
+        size,
+        color,
+        price: parseFloat(price),
+        stockQuantity: parseInt(stockQuantity) || 0,
+        imageUrls: imageUrls ? JSON.stringify(imageUrls) : null
       }
-      res.json({ message: 'Product created successfully', productId: this.lastID });
-    }
-  );
+    });
+
+    res.status(201).json({ message: 'Product created successfully', productId: product.id });
+  } catch (error) {
+    console.error('Create product error:', error);
+    res.status(500).json({ error: 'Failed to create product' });
+  }
 });
 
-router.put('/:id', authenticateToken, requireAdmin, (req, res) => {
+router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
   const { name, description, category, size, color, price, stockQuantity, imageUrls } = req.body;
 
-  db.run(
-    `UPDATE products 
-     SET name = ?, description = ?, category = ?, size = ?, color = ?, 
-         price = ?, stock_quantity = ?, image_urls = ?
-     WHERE id = ?`,
-    [name, description, category, size, color, price, stockQuantity, JSON.stringify(imageUrls), req.params.id],
-    function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to update product' });
+  try {
+    const product = await prisma.product.update({
+      where: { id: req.params.id },
+      data: {
+        ...(name && { name }),
+        ...(description && { description }),
+        ...(category && { category }),
+        ...(size && { size }),
+        ...(color && { color }),
+        ...(price && { price: parseFloat(price) }),
+        ...(stockQuantity !== undefined && { stockQuantity: parseInt(stockQuantity) }),
+        ...(imageUrls && { imageUrls: JSON.stringify(imageUrls) })
       }
-      res.json({ message: 'Product updated successfully' });
-    }
-  );
+    });
+
+    res.json({ message: 'Product updated successfully', product });
+  } catch (error) {
+    console.error('Update product error:', error);
+    res.status(500).json({ error: 'Failed to update product' });
+  }
 });
 
-router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
-  db.run('UPDATE products SET is_active = 0 WHERE id = ?', [req.params.id], function(err) {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to delete product' });
-    }
+router.delete('/:id', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    await prisma.product.update({
+      where: { id: req.params.id },
+      data: { isActive: false }
+    });
+
     res.json({ message: 'Product deleted successfully' });
-  });
+  } catch (error) {
+    console.error('Delete product error:', error);
+    res.status(500).json({ error: 'Failed to delete product' });
+  }
 });
 
 module.exports = router;

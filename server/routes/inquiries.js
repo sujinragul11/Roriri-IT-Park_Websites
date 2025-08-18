@@ -1,6 +1,7 @@
 const express = require('express');
-const db = require('../database/init');
+const { prisma } = require('../config/database');
 const { sendEmail } = require('../utils/email');
+const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -12,39 +13,69 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Name, email, message, and type are required' });
   }
 
-  db.run(
-    `INSERT INTO inquiries (type, name, email, phone, subject, message)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [type, name, email, phone, subject, message],
-    async function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to submit inquiry' });
+  try {
+    const inquiry = await prisma.inquiry.create({
+      data: {
+        type,
+        name,
+        email,
+        phone,
+        subject,
+        message
       }
+    });
 
-      // Send confirmation email
-      try {
-        await sendEmail({
-          to: email,
-          subject: 'Inquiry Received',
-          text: `Thank you for your inquiry! We've received your message and will get back to you soon.`
-        });
-      } catch (emailErr) {
-        console.error('Email error:', emailErr);
-      }
-
-      res.json({ message: 'Inquiry submitted successfully', inquiryId: this.lastID });
+    // Send confirmation email
+    try {
+      await sendEmail({
+        to: email,
+        subject: 'Inquiry Received',
+        text: `Thank you for your inquiry! We've received your message and will get back to you soon.`
+      });
+    } catch (emailErr) {
+      console.error('Email error:', emailErr);
     }
-  );
+
+    res.status(201).json({ message: 'Inquiry submitted successfully', inquiryId: inquiry.id });
+  } catch (error) {
+    console.error('Create inquiry error:', error);
+    res.status(500).json({ error: 'Failed to submit inquiry' });
+  }
 });
 
 // Get all inquiries (admin only)
-router.get('/', (req, res) => {
-  db.all('SELECT * FROM inquiries ORDER BY created_at DESC', (err, inquiries) => {
-    if (err) {
-      return res.status(500).json({ error: 'Database error' });
-    }
+router.get('/', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    const inquiries = await prisma.inquiry.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+
     res.json(inquiries);
-  });
+  } catch (error) {
+    console.error('Get inquiries error:', error);
+    res.status(500).json({ error: 'Failed to fetch inquiries' });
+  }
+});
+
+// Update inquiry status (admin only)
+router.put('/:id/status', authenticateToken, requireAdmin, async (req, res) => {
+  const { status } = req.body;
+  
+  if (!status) {
+    return res.status(400).json({ error: 'Status is required' });
+  }
+
+  try {
+    const inquiry = await prisma.inquiry.update({
+      where: { id: req.params.id },
+      data: { status }
+    });
+
+    res.json({ message: 'Inquiry status updated successfully', inquiry });
+  } catch (error) {
+    console.error('Update inquiry status error:', error);
+    res.status(500).json({ error: 'Failed to update inquiry status' });
+  }
 });
 
 module.exports = router;

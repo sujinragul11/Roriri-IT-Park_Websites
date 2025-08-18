@@ -1,47 +1,65 @@
 const express = require('express');
-const db = require('../database/init');
+const { prisma } = require('../config/database');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Get gallery images by business type
-router.get('/:businessType', (req, res) => {
-  db.all(
-    'SELECT * FROM gallery WHERE business_type = ? ORDER BY sort_order ASC, created_at DESC',
-    [req.params.businessType],
-    (err, images) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database error' });
-      }
-      res.json(images);
-    }
-  );
+router.get('/:businessType', async (req, res) => {
+  try {
+    const images = await prisma.gallery.findMany({
+      where: { businessType: req.params.businessType.toUpperCase() },
+      orderBy: [
+        { sortOrder: 'asc' },
+        { createdAt: 'desc' }
+      ]
+    });
+
+    res.json(images);
+  } catch (error) {
+    console.error('Get gallery error:', error);
+    res.status(500).json({ error: 'Failed to fetch gallery images' });
+  }
 });
 
 // Admin routes
-router.post('/', authenticateToken, requireAdmin, (req, res) => {
+router.post('/', authenticateToken, requireAdmin, async (req, res) => {
   const { businessType, title, description, imageUrl, altText, sortOrder } = req.body;
 
-  db.run(
-    `INSERT INTO gallery (business_type, title, description, image_url, alt_text, sort_order)
-     VALUES (?, ?, ?, ?, ?, ?)`,
-    [businessType, title, description, imageUrl, altText, sortOrder || 0],
-    function(err) {
-      if (err) {
-        return res.status(500).json({ error: 'Failed to add image' });
+  if (!businessType || !imageUrl) {
+    return res.status(400).json({ error: 'Business type and image URL are required' });
+  }
+
+  try {
+    const image = await prisma.gallery.create({
+      data: {
+        businessType: businessType.toUpperCase(),
+        title,
+        description,
+        imageUrl,
+        altText,
+        sortOrder: sortOrder || 0
       }
-      res.json({ message: 'Image added successfully', imageId: this.lastID });
-    }
-  );
+    });
+
+    res.status(201).json({ message: 'Image added successfully', imageId: image.id });
+  } catch (error) {
+    console.error('Add gallery image error:', error);
+    res.status(500).json({ error: 'Failed to add image' });
+  }
 });
 
-router.delete('/:id', authenticateToken, requireAdmin, (req, res) => {
-  db.run('DELETE FROM gallery WHERE id = ?', [req.params.id], function(err) {
-    if (err) {
-      return res.status(500).json({ error: 'Failed to delete image' });
-    }
+router.delete('/:id', authenticateToken, requireAdmin, async (req, res) => {
+  try {
+    await prisma.gallery.delete({
+      where: { id: req.params.id }
+    });
+
     res.json({ message: 'Image deleted successfully' });
-  });
+  } catch (error) {
+    console.error('Delete gallery image error:', error);
+    res.status(500).json({ error: 'Failed to delete image' });
+  }
 });
 
 module.exports = router;

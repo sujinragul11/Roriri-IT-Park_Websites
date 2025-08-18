@@ -1,0 +1,39 @@
+{
+  "name": "roririitpark-backend",
+  "version": "1.0.0",
+  "description": "Backend API for RoririItPark multi-business platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest",
+    "db:generate": "npx prisma generate",
+    "db:push": "npx prisma db push",
+    "db:seed": "node scripts/seed.js",
+    "db:studio": "npx prisma studio",
+    "db:reset": "npx prisma migrate reset --force"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.13.0",
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.1",
+    "bcryptjs": "^3.0.2",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^17.2.0",
+    "nodemailer": "^7.0.5",
+    "json2csv": "^6.0.0-alpha.2",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.13.0",
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
+  }
+}
