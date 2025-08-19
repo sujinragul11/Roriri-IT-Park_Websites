@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
-const { prisma } = require('../config/database');
+import jwt from 'jsonwebtoken';
+import { prisma } from '../config/database.js';
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -32,4 +32,4 @@ const requireAuth = (req, res, next) => {
   next();
 };
 
-module.exports = { authenticateToken, requireAdmin };
+export { authenticateToken, requireAdmin };

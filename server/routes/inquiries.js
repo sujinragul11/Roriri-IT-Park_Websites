@@ -1,7 +1,7 @@
-const express = require('express');
-const { prisma } = require('../config/database');
-const { sendEmail } = require('../utils/email');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
+import express from 'express';
+import { prisma } from '../config/database.js';
+import { sendEmail } from '../utils/email.js';
+import { authenticateToken, requireAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -78,4 +78,4 @@ router.put('/:id/status', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

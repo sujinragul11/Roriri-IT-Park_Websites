@@ -1,7 +1,7 @@
-const express = require('express');
-const { prisma } = require('../config/database');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
-const { sendEmail } = require('../utils/email');
+import express from 'express';
+import { prisma } from '../config/database.js';
+import { authenticateToken, requireAdmin } from '../middleware/auth.js';
+import { sendEmail } from '../utils/email.js';
 
 const router = express.Router();
 
@@ -194,4 +194,4 @@ router.delete('/:id', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

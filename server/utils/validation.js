@@ -42,7 +42,7 @@ const validatePagination = (page, limit) => {
   };
 };
 
-module.exports = {
+export {
   validateEmail,
   validatePhone,
   validatePassword,

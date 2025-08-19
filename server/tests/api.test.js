@@ -1,7 +1,7 @@
 // Basic API tests - Run with: npm test
 
-const request = require('supertest');
-const app = require('../index');
+import request from 'supertest';
+import app from '../index.js';
 
 describe('API Health Check', () => {
   test('GET /api/health should return OK', async () => {

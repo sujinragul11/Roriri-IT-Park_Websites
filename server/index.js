@@ -1,24 +1,32 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const path = require('path');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Configure dotenv
+dotenv.config();
+
+// ES module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Import database connection
-const { connectDatabase } = require('./config/database');
+import { connectDatabase } from './config/database.js';
 
 // Import routes
-const authRoutes = require('./routes/auth');
-const coursesRoutes = require('./routes/courses');
-const productsRoutes = require('./routes/products');
-const packagesRoutes = require('./routes/packages');
-const bookingsRoutes = require('./routes/bookings');
-const inquiriesRoutes = require('./routes/inquiries');
-const galleryRoutes = require('./routes/gallery');
-const jobsRoutes = require('./routes/jobs');
-const adminRoutes = require('./routes/admin');
-const instructorsRoutes = require('./routes/instructors');
+import authRoutes from './routes/auth.js';
+import coursesRoutes from './routes/courses.js';
+import productsRoutes from './routes/products.js';
+import packagesRoutes from './routes/packages.js';
+import bookingsRoutes from './routes/bookings.js';
+import inquiriesRoutes from './routes/inquiries.js';
+import galleryRoutes from './routes/gallery.js';
+import jobsRoutes from './routes/jobs.js';
+import adminRoutes from './routes/admin.js';
+import instructorsRoutes from './routes/instructors.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;

@@ -1,4 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error'],
@@ -27,7 +28,6 @@ async function createDefaultAdmin() {
     });
 
     if (!existingAdmin) {
-      const bcrypt = require('bcryptjs');
       const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD || 'admin123', 12);
       
       await prisma.user.create({
@@ -51,4 +51,4 @@ process.on('beforeExit', async () => {
   await prisma.$disconnect();
 });
 
-module.exports = { prisma, connectDatabase };
+export { prisma, connectDatabase };

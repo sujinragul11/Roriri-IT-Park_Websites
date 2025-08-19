@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend API for RoririItPark multi-business platform",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
@@ -34,6 +35,13 @@
   },
   "jest": {
     "testEnvironment": "node",
+    "preset": "es-modules",
+    "extensionsToTreatAsEsm": [".js"],
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
     "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
   }
 }

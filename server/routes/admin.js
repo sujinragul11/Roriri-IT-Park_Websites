@@ -1,7 +1,7 @@
-const express = require('express');
-const { prisma } = require('../config/database');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
-const { Parser } = require('json2csv');
+import express from 'express';
+import { prisma } from '../config/database.js';
+import { authenticateToken, requireAdmin } from '../middleware/auth.js';
+import { Parser } from 'json2csv';
 
 const router = express.Router();
 
@@ -247,4 +247,4 @@ router.delete('/users/:id', authenticateToken, requireAdmin, async (req, res) =>
   }
 });
 
-module.exports = router;
+export default router;
