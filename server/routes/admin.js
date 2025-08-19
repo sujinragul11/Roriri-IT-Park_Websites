@@ -2,6 +2,7 @@ import express from 'express';
 import { prisma } from '../config/database.js';
 import { authenticateToken, requireAdmin } from '../middleware/auth.js';
 import { Parser } from 'json2csv';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
