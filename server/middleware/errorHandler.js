@@ -78,7 +78,4 @@ const notFoundHandler = (req, res) => {
   });
 };
 
-export {
-  errorHandler,
-  notFoundHandler
-};
+export { errorHandler, notFoundHandler };

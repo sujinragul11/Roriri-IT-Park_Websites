@@ -15,3 +15,5 @@ afterAll(async () => {
 
 // Global test utilities
 global.prisma = prisma;
+
+export { prisma };

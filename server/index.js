@@ -28,6 +28,9 @@ import jobsRoutes from './routes/jobs.js';
 import adminRoutes from './routes/admin.js';
 import instructorsRoutes from './routes/instructors.js';
 
+// Import middleware
+import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -159,35 +162,11 @@ app.get('/api/docs', (req, res) => {
   });
 });
 
-// Error handling
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong!'
-  });
-});
+// Error handling middleware
+app.use(errorHandler);
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ 
-    error: 'Route not found',
-    availableRoutes: [
-      '/api/health',
-      '/api/docs',
-      '/api/auth/*',
-      '/api/admin/*',
-      '/api/courses/*',
-      '/api/products/*',
-      '/api/packages/*',
-      '/api/bookings/*',
-      '/api/inquiries/*',
-      '/api/jobs/*',
-      '/api/instructors/*',
-      '/api/gallery/*'
-    ]
-  });
-});
+// 404 handler (must be last)
+app.use('*', notFoundHandler);
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
@@ -206,3 +185,5 @@ app.listen(PORT, () => {
   console.log(`🏥 Health Check: http://localhost:${PORT}/api/health`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
 });
+
+export default app;
