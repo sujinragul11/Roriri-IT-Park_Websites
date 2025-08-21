@@ -116,21 +116,21 @@ const RithishFarms = () => {
   const testimonials = [
     {
       id: 1,
-      name: "Rahul Sharma",
+      name: "Dhinesh",
       comment: "The farm tour was educational and fun for our whole family. The kids loved picking fruits!",
       rating: 5,
       date: "2023-05-15"
     },
     {
       id: 2,
-      name: "Priya Patel",
+      name: "Pooja",
       comment: "The farm-to-table experience was incredible. You can taste the difference with fresh ingredients!",
       rating: 5,
       date: "2023-06-22"
     },
     {
       id: 3,
-      name: "Anil Kumar",
+      name: "Sunil Kumar",
       comment: "Great weekend getaway from the city. Peaceful environment and knowledgeable staff.",
       rating: 4,
       date: "2023-04-10"
@@ -825,13 +825,13 @@ const RithishFarms = () => {
                   { 
                     icon: Phone, 
                     title: "Phone", 
-                    content: "+91 1234567890",
+                    content: "+91 7338941579",
                     color: "from-green-400 to-emerald-400"
                   },
                   { 
                     icon: Mail, 
                     title: "Email", 
-                    content: "info@rithishfarms.com",
+                    content: "admin@roririsoft.com",
                     color: "from-purple-400 to-pink-400"
                   }
                 ].map((item, index) => (

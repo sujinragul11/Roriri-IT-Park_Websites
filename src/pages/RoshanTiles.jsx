@@ -576,7 +576,7 @@ const RoshanTiles = () => {
                       <h4 className="font-bold text-gray-800">Contact Numbers</h4>
                       <p className="text-gray-600">
                         Sales: (+91) 7338941579<br />
-                        Office: (+91) 1234567890
+                        Office: (+91) 7338941579
                       </p>
                     </div>
                   </div>

@@ -112,7 +112,7 @@ const IndustrialVisits = () => {
   const testimonials = [
     {
       id: 1,
-      name: 'Namirajan',
+      name: 'Nambirajan',
       role: 'Professor, Computer Science',
       quote: 'Roriri IT Park\'s visits are a game-changer for students, blending academics with real-world tech exposure!',
       rating: 5,

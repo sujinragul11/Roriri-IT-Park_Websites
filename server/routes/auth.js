@@ -1,3 +1,4 @@
+// server/routes/authRoutes.js
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -6,7 +7,9 @@ import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Login
+/**
+ * Login
+ */
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -17,10 +20,7 @@ router.post('/login', async (req, res) => {
   try {
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          { username: username },
-          { email: username }
-        ]
+        OR: [{ username: username }, { email: username }]
       }
     });
 
@@ -54,7 +54,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get current user
+/**
+ * Get current user
+ */
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
@@ -79,7 +81,9 @@ router.get('/me', authenticateToken, async (req, res) => {
   }
 });
 
-// Change password
+/**
+ * Change password
+ */
 router.put('/change-password', authenticateToken, async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
@@ -98,7 +102,7 @@ router.put('/change-password', authenticateToken, async (req, res) => {
     }
 
     const hashedNewPassword = await bcrypt.hash(newPassword, 12);
-    
+
     await prisma.user.update({
       where: { id: req.user.id },
       data: { password: hashedNewPassword }
