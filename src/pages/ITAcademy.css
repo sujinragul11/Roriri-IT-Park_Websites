@@ -1,0 +1,34 @@
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+@media (min-width: 768px) {
+  .cards {
+    flex-direction: row;
+  }
+}
+
+.cards .card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 300px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 400ms;
+}
+
+.cards .card:hover {
+  transform: scale(1.05, 1.05);
+}
+
+.cards:hover > .card:not(:hover) {
+  filter: blur(2px);
+  transform: scale(0.95, 0.95);
+  opacity: 0.8;
+}
