@@ -1,44 +1,58 @@
-// Cybersecurity.jsx
 import { useState, useEffect } from 'react';
+
+// Importing all cybersecurity images
+import CybersecurityImg from '/src/Assets/CyberSecurity/Cybersecurity.jpg';
+import EthicalHacking from '/src/Assets/CyberSecurity/EthicalHacking.jpg';
+import NetworkSecurity from '/src/Assets/CyberSecurity/NetworkSecurity.jpg';
+import DigitalForensics from '/src/Assets/CyberSecurity/DigitalForensics.jpg';
+import Cryptography from '/src/Assets/CyberSecurity/Cryptography.jpg';
+import KaliLinux from '/src/Assets/CyberSecurity/KaliLinux.jpg';
+import Wireshark from '/src/Assets/CyberSecurity/Wireshark.jpg';
+import Metasploit from '/src/Assets/CyberSecurity/Metasploit.jpg';
+import Nmap from '/src/Assets/CyberSecurity/Nmap.jpg';
+import SecurityAnalyst from '/src/Assets/CyberSecurity/SecurityAnalyst.jpg';
+import PenetrationTester from '/src/Assets/CyberSecurity/PenetrationTester.webp';
+import ForensicExpert from '/src/Assets/CyberSecurity/ForensicExpert.webp';
+import SecurityArchitect from '/src/Assets/CyberSecurity/SecurityArchitect.webp';
 
 const Cybersecurity = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // Cybersecurity data with local image paths
+  // Cybersecurity data with imported images
   const cyberData = {
     overview: {
       title: "Cybersecurity",
       description: "Master the art of protecting systems, networks, and programs from digital attacks. Learn ethical hacking techniques, network security fundamentals, and digital forensics to become a skilled cybersecurity professional.",
       duration: "7 months",
       level: "Intermediate",
-      image: "/src/Assets/CyberSecurity/Cybersecurity.jpg"
+      image: CybersecurityImg
     },
     domains: {
       title: "Security Domains",
       items: [
-        { name: "Ethical Hacking", image: "/src/Assets/CyberSecurity/EthicalHacking.jpg" },
-        { name: "Network Security", image: "/src/Assets/CyberSecurity/NetworkSecurity.jpg" },
-        { name: "Digital Forensics", image: "/src/Assets/CyberSecurity/DigitalForensics.jpg" },
-        { name: "Cryptography", image: "/src/Assets/CyberSecurity/Cryptography.jpg" }
+        { name: "Ethical Hacking", image: EthicalHacking },
+        { name: "Network Security", image: NetworkSecurity },
+        { name: "Digital Forensics", image: DigitalForensics },
+        { name: "Cryptography", image: Cryptography }
       ]
     },
     tools: {
       title: "Security Tools",
       items: [
-        { name: "Kali Linux", image: "/src/Assets/CyberSecurity/KaliLinux.jpg" },
-        { name: "Wireshark", image: "/src/Assets/CyberSecurity/Wireshark.jpg" },
-        { name: "Metasploit", image: "/src/Assets/CyberSecurity/Metasploit.jpg" },
-        { name: "Nmap", image: "/src/Assets/CyberSecurity/Nmap.jpg" }
+        { name: "Kali Linux", image: KaliLinux },
+        { name: "Wireshark", image: Wireshark },
+        { name: "Metasploit", image: Metasploit },
+        { name: "Nmap", image: Nmap }
       ]
     },
     certifications: {
       title: "Career Paths",
       items: [
-        { name: "Security Analyst", image: "/src/Assets/CyberSecurity/SecurityAnalyst.jpg" },
-        { name: "Penetration Tester", image: "/src/Assets/CyberSecurity/PenetrationTester.webp" },
-        { name: "Forensic Expert", image: "/src/Assets/CyberSecurity/ForensicExpert.webp" },
-        { name: "Security Architect", image: "/src/Assets/CyberSecurity/SecurityArchitect.webp" }
+        { name: "Security Analyst", image: SecurityAnalyst },
+        { name: "Penetration Tester", image: PenetrationTester },
+        { name: "Forensic Expert", image: ForensicExpert },
+        { name: "Security Architect", image: SecurityArchitect }
       ]
     }
   };
@@ -122,9 +136,6 @@ const Cybersecurity = () => {
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "/src/Assets/CyberSecurity/Cybersecurity.jpg"; // Fallback image
-          }}
         />
       </div>
       <div className="p-4">

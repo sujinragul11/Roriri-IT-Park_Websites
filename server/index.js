@@ -1,182 +1,66 @@
+// index.js
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import morgan from 'morgan';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
-// Configure dotenv
+// Load env variables
 dotenv.config();
 
-// ES module __dirname equivalent
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Import routes (check filenames match exactly in your routes folder)
+import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/UserRoutes.js';   // ✅ fixed typo
+import orderRoutes from './routes/orderRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
+import productRoutes from './routes/productRoutes.js';
+import packageRoutes from './routes/packageRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
+import inquiryRoutes from './routes/inquiryRoutes.js';
+import jobRoutes from './routes/jobRoutes.js';
+import instructorRoutes from './routes/instructorRoutes.js';
+import galleryRoutes from './routes/galleryRoutes.js';
 
-// Import database connection
-import { connectDatabase } from './config/database.js';
 
-// Import routes
-import authRoutes from './routes/auth.js';
-import coursesRoutes from './routes/courses.js';
-import productsRoutes from './routes/products.js';
-import packagesRoutes from './routes/packages.js';
-import bookingsRoutes from './routes/bookings.js';
-import inquiriesRoutes from './routes/inquiries.js';
-import galleryRoutes from './routes/gallery.js';
-import jobsRoutes from './routes/jobs.js';
-import adminRoutes from './routes/admin.js';
-import instructorsRoutes from './routes/instructors.js';
 
+// App init
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
-// Connect to database
-connectDatabase();
-
-// Middleware
-app.use(helmet({
-  crossOriginEmbedderPolicy: false,
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
-    },
-  },
-}));
-
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
-app.use(morgan('combined'));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/courses', coursesRoutes);
-app.use('/api/instructors', instructorsRoutes);
-app.use('/api/products', productsRoutes);
-app.use('/api/packages', packagesRoutes);
-app.use('/api/bookings', bookingsRoutes);
-app.use('/api/inquiries', inquiriesRoutes);
-app.use('/api/gallery', galleryRoutes);
-app.use('/api/jobs', jobsRoutes);
-app.use('/api/admin', adminRoutes);
+// Middlewares
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(morgan('dev'));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
-    version: '1.0.0'
-  });
+  res.json({ status: 'OK', timestamp: new Date() });
 });
 
-// API documentation endpoint
+// Register routes
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', userRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/packages', packageRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/inquiries', inquiryRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/instructors', instructorRoutes);
+app.use('/api/gallery', galleryRoutes);
+
+// Docs endpoint (example)
 app.get('/api/docs', (req, res) => {
   res.json({
-    message: 'RoririItPark API Documentation',
-    version: '1.0.0',
-    endpoints: {
-      auth: {
-        'POST /api/auth/login': 'Login with username/email and password',
-        'GET /api/auth/me': 'Get current user info (requires auth)',
-        'PUT /api/auth/change-password': 'Change password (requires auth)'
-      },
-      admin: {
-        'GET /api/admin/stats': 'Get dashboard statistics (admin only)',
-        'GET /api/admin/export/:type': 'Export data as CSV (admin only)',
-        'GET /api/admin/users': 'Get all users (admin only)',
-        'POST /api/admin/users': 'Create user (admin only)',
-        'PUT /api/admin/users/:id': 'Update user (admin only)',
-        'DELETE /api/admin/users/:id': 'Delete user (admin only)'
-      },
-      courses: {
-        'GET /api/courses': 'Get all courses',
-        'GET /api/courses/:id': 'Get single course',
-        'POST /api/courses/:id/enroll': 'Enroll in course',
-        'POST /api/courses': 'Create course (admin only)',
-        'PUT /api/courses/:id': 'Update course (admin only)',
-        'DELETE /api/courses/:id': 'Delete course (admin only)'
-      },
-      products: {
-        'GET /api/products': 'Get all products (with filters)',
-        'GET /api/products/:id': 'Get single product',
-        'POST /api/products': 'Create product (admin only)',
-        'PUT /api/products/:id': 'Update product (admin only)',
-        'DELETE /api/products/:id': 'Delete product (admin only)'
-      },
-      packages: {
-        'GET /api/packages': 'Get all packages',
-        'GET /api/packages/:id': 'Get single package',
-        'POST /api/packages': 'Create package (admin only)',
-        'PUT /api/packages/:id': 'Update package (admin only)',
-        'DELETE /api/packages/:id': 'Delete package (admin only)'
-      },
-      bookings: {
-        'POST /api/bookings': 'Create booking',
-        'GET /api/bookings': 'Get all bookings (admin only)',
-        'PUT /api/bookings/:id/status': 'Update booking status (admin only)'
-      },
-      inquiries: {
-        'POST /api/inquiries': 'Submit inquiry',
-        'GET /api/inquiries': 'Get all inquiries (admin only)',
-        'PUT /api/inquiries/:id/status': 'Update inquiry status (admin only)'
-      },
-      jobs: {
-        'GET /api/jobs': 'Get all jobs',
-        'GET /api/jobs/:id': 'Get single job',
-        'POST /api/jobs/:id/apply': 'Apply for job',
-        'POST /api/jobs': 'Create job (admin only)',
-        'PUT /api/jobs/:id': 'Update job (admin only)',
-        'DELETE /api/jobs/:id': 'Delete job (admin only)',
-        'GET /api/jobs/:id/applications': 'Get job applications (admin only)'
-      },
-      instructors: {
-        'GET /api/instructors': 'Get all instructors',
-        'GET /api/instructors/:id': 'Get single instructor',
-        'POST /api/instructors': 'Create instructor (admin only)',
-        'PUT /api/instructors/:id': 'Update instructor (admin only)',
-        'DELETE /api/instructors/:id': 'Delete instructor (admin only)'
-      },
-      gallery: {
-        'GET /api/gallery/:businessType': 'Get gallery by business type',
-        'POST /api/gallery': 'Add gallery image (admin only)',
-        'DELETE /api/gallery/:id': 'Delete gallery image (admin only)'
-      }
-    }
-  });
-});
-
-// Error handling
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong!'
-  });
-});
-
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ 
-    error: 'Route not found',
-    availableRoutes: [
+    message: 'API Documentation placeholder',
+    routes: [
       '/api/health',
-      '/api/docs',
       '/api/auth/*',
       '/api/admin/*',
+      '/api/orders/*',
       '/api/courses/*',
       '/api/products/*',
       '/api/packages/*',
@@ -189,20 +73,29 @@ app.use('*', (req, res) => {
   });
 });
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  process.exit(0);
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Route not found',
+    availableRoutes: [
+      '/api/health',
+      '/api/docs',
+      '/api/auth/*',
+      '/api/admin/*',
+      '/api/orders/*',
+      '/api/courses/*',
+      '/api/products/*',
+      '/api/packages/*',
+      '/api/bookings/*',
+      '/api/inquiries/*',
+      '/api/jobs/*',
+      '/api/instructors/*',
+      '/api/gallery/*'
+    ]
+  });
 });
 
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
-  process.exit(0);
-});
-
+// Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📚 API Documentation: http://localhost:${PORT}/api/docs`);
-  console.log(`🏥 Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });

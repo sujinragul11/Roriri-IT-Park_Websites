@@ -1,42 +1,55 @@
 import { useState, useEffect } from 'react';
 
+// Importing all images
+import CloudComputingMastery from '/src/Assets/CloudComputing/CloudComputingMastery.jpg';
+import AWS from '/src/Assets/CloudComputing/AWS.jpg';
+import Azure from '/src/Assets/CloudComputing/Azure.jpg';
+import GoogleCloud from '/src/Assets/CloudComputing/GoogleCloud.jpg';
+import DevOps from '/src/Assets/CloudComputing/DevOps.jpg';
+import Kubernetes from '/src/Assets/CloudComputing/Kubernetes.webp';
+import Docker from '/src/Assets/CloudComputing/Docker.jpg';
+import Compute from '/src/Assets/CloudComputing/Compute.jpg';
+import Storage from '/src/Assets/CloudComputing/Storage.avif';
+import Networking from '/src/Assets/CloudComputing/Networking.jpg';
+import Databases from '/src/Assets/CloudComputing/Databases.jpg';
+
 const CloudComputing = () => {
   const [currentTab, setCurrentTab] = useState('overview');
   const [loading, setLoading] = useState(true);
 
-  // Cloud computing data with local image paths
+  // Cloud computing data with imported images
   const cloudData = {
     overview: {
       title: "Cloud Computing Mastery",
       description: "Cloud computing delivers computing services—servers, storage, databases, networking, software, analytics, and more—over the Internet ('the cloud'). This program covers AWS, Azure, Google Cloud, DevOps, and Kubernetes at an intermediate to advanced level.",
       duration: "5 months",
       level: "Intermediate to Advanced",
-      image: "/src/Assets/CloudComputing/CloudComputingMastery.jpg"
+      image: CloudComputingMastery
     },
     platforms: {
       title: "Cloud Platforms",
       items: [
-        { name: "AWS", image: "/src/Assets/CloudComputing/AWS.jpg" },
-        { name: "Azure", image: "/src/Assets/CloudComputing/Azure.jpg" },
-        { name: "Google Cloud", image: "/src/Assets/CloudComputing/GoogleCloud.jpg" }
+        { name: "AWS", image: AWS },
+        { name: "Azure", image: Azure },
+        { name: "Google Cloud", image: GoogleCloud }
       ]
     },
     technologies: {
       title: "Cloud Technologies",
       items: [
-        { name: "DevOps", image: "/src/Assets/CloudComputing/DevOps.jpg" },
-        { name: "Kubernetes", image: "/src/Assets/CloudComputing/Kubernetes.webp" },
-        { name: "Docker", image: "/src/Assets/CloudComputing/Docker.jpg" },
-        { name: "Terraform", image: "/src/Assets/CloudComputing/CloudComputingMastery.jpg" } // Placeholder - you might want to add a Terraform image
+        { name: "DevOps", image: DevOps },
+        { name: "Kubernetes", image: Kubernetes },
+        { name: "Docker", image: Docker },
+        { name: "Terraform", image: CloudComputingMastery } // Using placeholder
       ]
     },
     services: {
       title: "Cloud Services",
       items: [
-        { name: "Compute", image: "/src/Assets/CloudComputing/Compute.jpg" },
-        { name: "Storage", image: "/src/Assets/CloudComputing/Storage.avif" },
-        { name: "Networking", image: "/src/Assets/CloudComputing/Networking.jpg" },
-        { name: "Databases", image: "/src/Assets/CloudComputing/Databases.jpg" }
+        { name: "Compute", image: Compute },
+        { name: "Storage", image: Storage },
+        { name: "Networking", image: Networking },
+        { name: "Databases", image: Databases }
       ]
     }
   };
@@ -83,9 +96,6 @@ const CloudComputing = () => {
                 src={cloudData.overview.image} 
                 alt="Cloud Computing Overview" 
                 className="rounded-lg shadow-xl w-full h-auto"
-                onError={(e) => {
-                  e.target.src = "/src/Assets/CloudComputing/CloudComputingMastery.jpg";
-                }}
               />
             </div>
             <div className="md:w-1/2">
@@ -123,9 +133,6 @@ const CloudComputing = () => {
           src={image} 
           alt={name} 
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.src = "/src/Assets/CloudComputing/CloudComputingMastery.jpg";
-          }}
         />
       </div>
       <div className="p-4">
