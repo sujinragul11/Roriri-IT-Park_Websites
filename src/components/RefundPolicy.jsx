@@ -43,7 +43,7 @@ const RefundPolicy = () => {
       <h2>6. How to Request a Refund</h2>
       <p>
         To request a refund, please contact our support team at admin@roririsoft.com with your order details and 
-        reason for the refund request.
+        reason for  refund request.
       </p>
     </PolicyLayout>
   );
